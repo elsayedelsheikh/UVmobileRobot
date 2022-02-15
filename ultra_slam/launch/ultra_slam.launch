@@ -1,0 +1,19 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="configuration_basename" default="ultra_lds_2d.lua"/>
+  <arg name="open_rviz" default="true"/>
+
+  <!-- Ultra -->
+  <include file="$(find ultra_bringup)/launch/ultra_remote.launch">
+  </include>
+
+  <!-- SLAM: Gmapping -->
+  <include file="$(find ultra_slam)/launch/ultra_gmapping.launch">
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find ultra_slam)/rviz/ultra_gmapping.rviz"/>/>
+  </group>
+</launch>

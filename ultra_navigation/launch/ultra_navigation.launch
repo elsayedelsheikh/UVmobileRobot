@@ -1,0 +1,26 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="map_file" default="$(find ultra_navigation)/maps/map.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+  <!-- Ultra -->
+  <include file="$(find ultra_bringup)/launch/ultra_remote.launch">
+  </include>
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <include file="$(find ultra_navigation)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find ultra_navigation)/launch/move_base.launch">
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find ultra_navigation)/rviz/ultra_navigation.rviz"/>
+  </group>
+</launch>
